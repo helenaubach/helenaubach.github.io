@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualisation of a lensed gravitational wave</title>
+    <title>Visualisation of a lensed gravitational wave-</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
     <!--script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script-->
 
@@ -37,7 +37,7 @@
         }
 
         // Misma funcio que la anterior, pero sin tener en cuanta phi
-        // és la amplada de la ona gravitacional
+        // es la amplada de la ona gravitacional
         function h_plus_amp(t, G, Mc, c, r) {
             const tau = t; // En este caso, t y tau son la misma variable
             const term1 = 1 / r;
@@ -110,7 +110,7 @@
             }
 
             // calcular la variacion de la frecuencia de la ona
-            // de moment no es fa servir, era per a poder crear una ona sinusoidal amb aquesta modulació de frequencia
+            // de moment no es fa servir, era per a poder crear una ona sinusoidal amb aquesta modulacio de frequencia
             // pero no ha funcionat
             //frequency_values = frequency_variation(phi_tau_values, tau_values);
 
@@ -163,7 +163,7 @@
         }
 
         // crear una funcion que calcule la derivada de phi_tau_values respecte tau_values
-        // es decir la pendiente de la función phi_tau_values
+        // es decir la pendiente de la funcion phi_tau_values
         // este valor corresponde a la fequencia de la ona
         function frequency_variation(values, tau_values) {
             let derivada = [];
@@ -175,19 +175,19 @@
             return derivada;
         }
 
-        // Función para actualizar los valores de masa, distancia y desfase
-        //function updateValues() {
+        // Funcion para actualizar los valores de masa, distancia y desfase
+        function updateValues() {
 
-        //    generateValues();
-        //    h_plus_values_shifted = generateShiftedWave(h_plus_values, offset);
-        //    redraw();
-        //}
+            generateValues();
+            h_plus_values_shifted = generateShiftedWave(h_plus_values, offset);
+            redraw();
+        }
 
-        // Función para reproducir el sonido
+        // Funcion para reproducir el sonido
         function playSound() {
-            let duration = t_init - t_end + offset; // Duración en segundos
+            let duration = t_init - t_end + offset; // Duracion en segundos
             let sampleRate = 44100; // Frecuencia de muestreo
-            let frames = sampleRate * duration; // Número de muestras
+            let frames = sampleRate * duration; // Numero de muestras
             let soundBuffer = new Float32Array(frames);
 
             let maxVal = Math.max(...h_plus_values_shifted);
@@ -406,14 +406,14 @@
             endShape();
 
             // dibujar la amplada de la ona
-            stroke(255, 0, 0);
-            beginShape();
-            for (let i = 0; i < tau_values.length; i++) {
-                let x = map(tau_values[i], t_init, t_end-offset, 50, 850);
-                let y = map(h_plus_amp_values[i], -1, 1, 550, 50);
-                vertex(x, y);
-            }
-            endShape();
+            //stroke(255, 0, 0);
+            //beginShape();
+            //for (let i = 0; i < tau_values.length; i++) {
+//                let x = map(tau_values[i], t_init, t_end-offset, 50, 850);
+//                let y = map(h_plus_amp_values[i], -1, 1, 550, 50);
+//                vertex(x, y);
+//            }
+//            endShape();
 
             // Dibujar valores de phi(tau)
             stroke(0, 255, 0);
