@@ -355,7 +355,8 @@
 
             // radios para massa de la lent (en unitats de massa solar): 30, 300, 3000, 6000, 3e4, 3e5
             createElement('label', 'Lens mass (in units of solar mass): ').position(10, 360);
-            let massaLentRadio = createRadio('massa_lent').position(350, 360);
+            let massaLentRadio = createRadio('massa_lent');
+            massaLentRadio.position(350,360);
             massaLentRadio.parent('html-text');
             massaLentRadio.option('30', 30);
             massaLentRadio.option('300', 300);
