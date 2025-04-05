@@ -13,7 +13,7 @@
 
 <h4>Sonification of a (non-lensed) gravitational wave</h4>
 
-<p>Instructions:<br>
+<p><b>Instructions:</b><br>
 (1) In the text box, write the value of the "chirp mass" of the black hole binary system that you would like to hear.<br>
 (2) Click the left "Send" button to create the visual gravitational wave representation. The plot that will appear represents the deformation of space-time (one of the polarisations), h+, as a function of time t.<br>
 (3) Click the right "Play sound" button to hear the sonification of the gravitational wave you just created. Please be careful to your ears when hearing high pitch sounds (masses below 1 solar mass). </p>
@@ -86,18 +86,18 @@
             generateValues();
 
             // Crear campos de entrada para masa y distancia
-            createElement('label', 'Chirp mass of the source<br>(in units of solar mass): ').position(10, 180);
-            massInput = createInput('30').position(250, 200);
+            createElement('label', 'Chirp mass of the source<br>(in units of solar mass): ').position(10, 200);
+            massInput = createInput('30').position(250, 220);
             
             //createElement('label', 'Distancia (megaparsecs): ').position(10, 40);
             //distanceInput = createInput('1').position(250, 40);
 
             // Crear boton de enviar
-            submitButton = createButton('Send').position(400, 200);
+            submitButton = createButton('Send').position(400, 220);
             submitButton.mousePressed(updateValues);
 
             // Crear boton de reproduccion de sonido
-            let playButton = createButton('Play Sound').position(450, 200);
+            let playButton = createButton('Play Sound').position(450, 220);
             playButton.mousePressed(playSound);
         }
 
