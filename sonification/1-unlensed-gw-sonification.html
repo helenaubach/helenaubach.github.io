@@ -11,7 +11,7 @@
         }
     </style>
 
-
+<h4>Sonification of a (non-lensed) gravitational wave</h4>
 
 <p>Instructions:<br>
 (1) In the text box, write the value of the "chirp mass" of the black hole binary system that you would like to hear.<br>
@@ -97,7 +97,7 @@
             submitButton.mousePressed(updateValues);
 
             // Crear boton de reproduccion de sonido
-            let playButton = createButton('Play Sound').position(450, 10);
+            let playButton = createButton('Play Sound').position(450, 100);
             playButton.mousePressed(playSound);
         }
 
@@ -148,7 +148,7 @@
             textAlign(CENTER);
             text('t', 400, 580);
             textAlign(RIGHT);
-            text('h_+(t)', 50, 50);
+            text('h+(t)', 40, 50);
 
             // Dibujar valores de h_+(t)
             noFill();
