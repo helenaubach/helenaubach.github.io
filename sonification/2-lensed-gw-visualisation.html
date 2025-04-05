@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualisation of a lensed gravitational wave</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script-->
+
+    <style>
+        input[type="radio"] {
+            margin-left: 15px;
+        }
+    </style>
+
+    <script src="functions.js"></script>
+
+    <script>
+
+        // Funcion para calcular phi(tau)
+        function phi(tau, G, Mc, c, phi0) {
+            const term1 = Math.pow(5 * G * Mc / Math.pow(c, 3), -5 / 8);
+            const phi_tau = -2 * term1 * Math.pow(tau, 5 / 8) + phi0;
+            return phi_tau;
+        }
+
+        // Funcion para calcular h_+(t)
+        function h_plus(t, G, Mc, c, r, phi0) {
+            const tau = t; // En este caso, t y tau son la misma variable
+            const phi_tau = phi(tau, G, Mc, c, phi0);
+            phi_tau_values.push(phi_tau);
+            const term1 = 1 / r;
+            const term2 = Math.pow(G * Mc / Math.pow(c, 2), 5 / 4);
+            const term3 = Math.pow(5 / (c * tau), 1 / 4);
+            const h_plus_t = term1 * term2 * term3 * Math.cos(phi_tau);
+            return h_plus_t;
+        }
+
+        // Misma funcio que la anterior, pero sin tener en cuanta phi
+        // és la amplada de la ona gravitacional
+        function h_plus_amp(t, G, Mc, c, r) {
+            const tau = t; // En este caso, t y tau son la misma variable
+            const term1 = 1 / r;
+            const term2 = Math.pow(G * Mc / Math.pow(c, 2), 5 / 4);
+            const term3 = Math.pow(5 / (c * tau), 1 / 4);
+            const h_plus_t = term1 * term2 * term3;
+            return h_plus_t;
+        }
+
+        // Variables globales
+        let G = 6.67430e-11; // Constante de gravitacion universal en m^3 kg^-1 s^-2
+        let massMultiplier = 30; // Masa en masas solares
+        let Mc = massMultiplier*1.989e30; // Masa en kg (respecte masa del Sol)
+        let c = 299792458; // Velocidad de la luz en m/s
+        let r = 3.086e25; // Distancia. 1 Mpc = 3.086e25 metros
+        let phi0 = 0; // Valor inicial de Phi
+        let t_init = 10; // Valor inicial de tau
+        let t_end = 0.0001; // Valor final de tau
+        let tau_values = [];
+        let phi_tau_values = [];
+        let h_plus_values = [];
+        let h_plus_values_shifted = [];
+        let h_plus_amp_values = [];
+        let frequency_values = [];
+        let new_frequency_values = [];
+        //let offset = 0.3; // Desfase en segundos (ejemplo)
+        let samplesSecond = 1000;
+        let steps = (t_init-t_end)*samplesSecond; // Tasa de muestreo en Hz
+        // massa de la lent
+        let mlent = 30000; // massa de la lent en masses solars
+        let y = 0.2; // posicio de la font respecte l'alineament lent-observador
+        //let vv = y/((y.pow(2)+4).pow(1/2)); // eq. 29, BU-2022
+        // escribir la equacion anterior corregida para js
+        let vv = y/((y**2+4)**(1/2)); // eq. 29, BU-2022
+        let amp1 = (y*(vv+(1/vv)+2))**(1/2); // eq. 30, BU-2022
+        let amp2 = (y*(vv+(1/vv)-2))**(1/2); // eq. 30, BU-2022
+        let offset = 0.00004*mlent*y; // desfase en segons
+        console.log(amp1);
+        console.log(amp2);
+        console.log(offset);
+        
+        // sound test
+        let wave_ = [];
+
+        let massInput, distanceInput, offsetInput, submitButton, tInitInput, tEndInput, massaLentInput;
+
+        // Generacion de los valores de tau y h_+(t)
+        function generateValues() {
+
+            vv = y/((y**2+4)**(1/2));
+            amp1 = (0.25*(vv+(1/vv)+2))**(1/2);
+            amp2 = (0.25*(vv+(1/vv)-2))**(1/2);
+
+            offset = 0.00004*mlent*y;
+
+            steps = (t_init-t_end)*samplesSecond;
+
+            Mc = 1.989e30 * massMultiplier;
+
+            tau_values = [];
+            h_plus_values = [];
+            h_plus_amp_values = [];
+            phi_tau_values = [];
+
+            for (let i = 0; i <= steps; i++) {
+                let tau = t_init - (t_init - t_end) * (i / steps);
+                tau_values.push(tau);
+                h_plus_values.push(h_plus(tau, G, Mc, c, r, phi0));
+                h_plus_amp_values.push(h_plus_amp(tau, G, Mc, c, r));
+            }
+
+            // calcular la variacion de la frecuencia de la ona
+            // de moment no es fa servir, era per a poder crear una ona sinusoidal amb aquesta modulació de frequencia
+            // pero no ha funcionat
+            //frequency_values = frequency_variation(phi_tau_values, tau_values);
+
+            // Normalizar solo para la grafica
+            h_plus_values = normalizeValues(h_plus_values);
+            h_plus_values = centerValues(h_plus_values);
+            h_plus_amp_values = normalizeValues01(h_plus_amp_values);
+            phi_tau_values = normalizeValues01(phi_tau_values);
+        }
+
+        // Normalizacion de los valores entre -1 y 1
+        function normalizeValues(values) {
+            let maxVal = Math.max(...values);
+            let minVal = Math.min(...values);
+            return values.map(v => 2 * (v - minVal) / (maxVal - minVal) - 1);
+        }
+        // Normalizacion de los valores entre 0 y 1
+        function normalizeValues01(values) {
+            let maxVal = Math.max(...values);
+            let minVal = Math.min(...values);
+            return values.map(v => (v - minVal) / (maxVal - minVal));
+        }
+
+        // Funcion para centrar los valores en Y
+        function centerValues(values) {
+            let sum = values.reduce((a, b) => a + b, 0);
+            let mean = sum / values.length;
+            return values.map(v => v - mean);
+        }
+
+        // Generacion de la onda desfasada y suma de las ondas
+        function generateShiftedWave(values, offse) {
+            let offsetSamples = Math.round(offset * steps / (t_init - t_end));
+            let shiftedValues = [];
+            let newValues = [];
+            let numSamples = values.length;
+            let new_val=0;
+            for (let i = 0; i < offsetSamples; i++) {
+                shiftedValues.push(0);
+                values.push(0);
+                tau_values.push(tau_values[tau_values.length-1] - (t_init - t_end) / steps);
+            }
+            for (let i = 0; i < numSamples; i++) {
+                shiftedValues.push(values[i]);
+            }
+            for (let i = 0; i < numSamples+offsetSamples; i++) {
+                newValues.push(values[i]*amp1 + shiftedValues[i]*amp2);
+            }
+            return newValues;
+        }
+
+        // crear una funcion que calcule la derivada de phi_tau_values respecte tau_values
+        // es decir la pendiente de la función phi_tau_values
+        // este valor corresponde a la fequencia de la ona
+        function frequency_variation(values, tau_values) {
+            let derivada = [];
+            for (let i = 0; i < values.length-1; i++) {
+                let m = (values[i+1] - values[i]) / (tau_values[i+1] - tau_values[i]);
+                let freq = Math.abs(m/(2*Math.PI));
+                derivada.push(freq);
+            }
+            return derivada;
+        }
+
+        // Función para actualizar los valores de masa, distancia y desfase
+        //function updateValues() {
+
+        //    generateValues();
+        //    h_plus_values_shifted = generateShiftedWave(h_plus_values, offset);
+        //    redraw();
+        //}
+
+        // Función para reproducir el sonido
+        function playSound() {
+            let duration = t_init - t_end + offset; // Duración en segundos
+            let sampleRate = 44100; // Frecuencia de muestreo
+            let frames = sampleRate * duration; // Número de muestras
+            let soundBuffer = new Float32Array(frames);
+
+            let maxVal = Math.max(...h_plus_values_shifted);
+            let minVal = Math.min(...h_plus_values_shifted);
+            let normalizedValues = h_plus_values_shifted.map(v => 2 * (v - minVal) / (maxVal - minVal) - 1);
+
+           /*for (let i = 0; i < frames; i++) {
+                let index = Math.floor(i * normalizedValues.length / frames);
+                soundBuffer[i] = normalizedValues[index];
+                //wave_[i] = soundBuffer[i]; // això és per a test
+            }*/
+            soundBuffer = resampleAudio(normalizedValues, sampleRate, samplesSecond);
+            //wave_ = soundBuffer;
+           
+            // probar amb una interpolació cúbica
+
+            let audioBuffer = getAudioContext().createBuffer(1, soundBuffer.length, sampleRate);
+            audioBuffer.copyToChannel(soundBuffer, 0);
+
+            let source = getAudioContext().createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(getAudioContext().destination);
+            source.start();
+        }
+
+        // create sine wave, un array con valores: la duración es la duración de la ona, la frecuencua varia entre frequency_values[0] y frequency_values[frequency_values.length-1], la amplitude es h_plus_amp_values, varia entre h_plus_amp_values[0] y h_plus_amp_values[h_plus_amp_values.length-1]. El numero de muestras es de 44100*(t_init - t_end)
+        function createSineWaveAndPlay() {
+            let duration = t_init - t_end; // Duración en segundos
+            let sampleRate = 44100; // Frecuencia de muestreo
+            let frames = sampleRate * duration; // Número de muestras
+            let offsetFrames = sampleRate * offset; // Número de muestras de desfase
+            let wave = new Float32Array(frames);
+
+            console.log(frequency_values.length);
+            new_frequency_values = interpolateArray(frequency_values, frames);
+            let new_h_plus_amp_values = interpolateArray(h_plus_amp_values, frames);
+
+            for (let i = 0; i < frames; i++) {
+                //wave[i] = (new_h_plus_amp_values[i]*5) * Math.sin(2 * Math.PI * new_frequency_values[i] * i / sampleRate);
+                wave[i] = Math.sin(2 * Math.PI * new_frequency_values[i] * i / sampleRate);
+            }
+            // crear una nueva onda, que ses la suma de la primera más la segunda desfasada offset segundos
+            // sin crear una segunda onda
+            let wave2 = new Float32Array(frames+offsetFrames);
+            let wave3 = new Float32Array(frames+offsetFrames);
+            // add the offset to the wave: 0 at the beginning
+            for (let i = 0; i < offsetFrames; i++) {
+                wave2[i] = 0;
+            }
+            for (let i = 0; i < frames; i++) {
+                wave2[i+offsetFrames] = wave[i];
+            }
+            // crear wave3 con ceros al final
+            for (let i = 0; i < frames; i++) {
+                wave3[i] = wave[i];
+            }
+            for (let i = 0; i < offsetFrames; i++) {
+                wave3[frames+i] = 0;
+            }
+            // sumar wave2 i wave3 en wave2
+            for (let i = 0; i < frames+offsetFrames; i++) {
+                wave2[i] = wave2[i] + wave3[i];
+                wave_[i] = wave2[i];
+            }
+
+            
+            /*
+            let index = 0;
+            for (let i = 0; i < offsetFrames; i++) {
+                wave2[index] = wave[i];
+                wave_[index] = wave[i];
+                index++;
+            }
+            for (let i = 0; i < frames-offsetFrames; i++) {
+                wave2[index] = wave[i] + wave[i+offsetFrames];
+                wave_[index] =  wave[i] + wave[i+offsetFrames];
+                index++;
+            }
+            for (let i = 0; i < offsetFrames; i++) {
+                wave2[index] = wave[i+frames-offsetFrames];
+                wave_[index] = wave[i+frames-offsetFrames];
+                index++;
+            }*/
+
+           /* let audioBuffer = getAudioContext().createBuffer(1, wave2.length, sampleRate);
+            audioBuffer.copyToChannel(wave2, 0);
+
+            let source = getAudioContext().createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(getAudioContext().destination);
+            source.start();*/
+        }
+
+        function interpolateArray(originalArray, newSize) {
+            const originalSize = originalArray.length;
+            const factor = (newSize - 1) / (originalSize - 1);
+            const interpolatedArray = [];
+
+            for (let i = 0; i < originalSize - 1; i++) {
+                const y0 = originalArray[i];
+                const y1 = originalArray[i + 1];
+                
+                interpolatedArray.push(y0);
+
+                for (let j = 1; j < factor; j++) {
+                    const interpolatedValue = y0 + (y1 - y0) * (j / factor);
+                    interpolatedArray.push(interpolatedValue);
+                }
+            }
+
+            interpolatedArray.push(originalArray[originalSize - 1]);
+
+            return interpolatedArray;
+        }
+
+         // Setup de p5.js
+        function setup() {
+            createCanvas(1000, 800);
+            generateValues();
+            h_plus_values_shifted = generateShiftedWave(h_plus_values, offset);
+
+            createElement('label', 'Chirp mass of the source (in units of solar mass): ').position(10, 10);
+            let massRadio = createRadio('massa_font').position(350, 10);
+            massRadio.option('5', 5);
+            massRadio.option('30', 30);
+            massRadio.option('80', 80);
+            massRadio.selected('30');
+            massRadio.changed(() => {
+                massMultiplier = massRadio.value();
+                updateValues();
+            });
+
+            // radios para massa de la lent (en unitats de massa solar): 30, 300, 3000, 6000, 3e4, 3e5
+            createElement('label', 'Lens mass (in units of solar mass): ').position(10, 40);
+            let massaLentRadio = createRadio('massa_lent').position(350, 40);
+            massaLentRadio.option('30', 30);
+            massaLentRadio.option('300', 300);
+            massaLentRadio.option('3000', 3000);
+            massaLentRadio.option('6000', 6000);
+            massaLentRadio.option('30000', 30000);
+            massaLentRadio.option('300000', 300000);
+            massaLentRadio.selected('30000');
+            massaLentRadio.changed(() => {
+                mlent = massaLentRadio.value();
+                updateValues();
+            });
+
+            createElement('label', 'Source alignment (y): ').position(10, 70);
+            let yRadio = createRadio('y_position').position(350, 70);
+            yRadio.option('0.1', 0.1);
+            yRadio.option('0.2', 0.2);
+            yRadio.option('0.3', 0.3);
+            yRadio.option('0.5', 0.5);
+            yRadio.option('0.7', 0.7);
+            yRadio.option('1', 1);
+            yRadio.option('2', 2);
+            yRadio.selected('0.2');
+            yRadio.changed(() => {
+                y = yRadio.value();
+                //offset = 0.00004*mlent*y;
+                updateValues();
+            });
+
+
+        }
+
+        // Draw de p5.js
+        function draw() {
+            background(255);
+            frameRate(1);
+
+            // Dibujar ejes
+            stroke(0);
+            line(50, 550, 850, 550); // Eje x
+            line(50, 550, 50, 50); // Eje y
+
+            // Etiquetas de los ejes
+            textSize(12);
+            textAlign(CENTER);
+            text('t', 400, 580);
+            textAlign(LEFT);
+            text('h_+(tau)', 20, 250);
+
+            // mostrar en la grafica, el valor de offset en segundos
+            textAlign(LEFT);
+            text('offset (seg.):', 50, 570);
+            text(offset, 130, 570);
+
+            // mostar amp1 i amp2
+            text('amp1:', 50, 590);
+            text(amp1, 90, 590);
+            text('amp2:', 50, 610);
+            text(amp2, 90, 610);
+
+
+
+            // Dibujar valores de h_+(t) shifted
+            noFill();
+            stroke(0, 0, 255);
+            beginShape();
+            for (let i = 0; i < tau_values.length; i++) {
+                let x = map(tau_values[i], t_init, t_end-offset, 50, 850);
+                let y = map(h_plus_values_shifted[i], -1, 1, 550, 50);
+                vertex(x, y);
+            }
+            endShape();
+
+            // Dibujar h_plus_values, la ona irreductible
+            stroke(100, 100, 100);
+            beginShape();
+            for (let i = 0; i < tau_values.length; i++) {
+                let x = map(tau_values[i], t_init, t_end-offset, 50, 850);
+                let y = map(h_plus_values[i], -1, 1, 550, 50);
+                vertex(x, y);
+            }
+            endShape();
+
+            // dibujar la amplada de la ona
+            stroke(255, 0, 0);
+            beginShape();
+            for (let i = 0; i < tau_values.length; i++) {
+                let x = map(tau_values[i], t_init, t_end-offset, 50, 850);
+                let y = map(h_plus_amp_values[i], -1, 1, 550, 50);
+                vertex(x, y);
+            }
+            endShape();
+
+            // Dibujar valores de phi(tau)
+            stroke(0, 255, 0);
+            beginShape();
+            for (let i = 0; i < tau_values.length; i++) {
+                let x = map(tau_values[i], t_init, t_end-offset, 50, 850);
+                let y = map(phi_tau_values[i], -1, 1, 550, 50);
+                vertex(x, y);
+            }
+            endShape();
+
+
+        }
+
+        function getAudioContext() {
+            if (!window.audioContext) {
+                window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return window.audioContext;
+        }
+
+    </script>
+</head>
+<body>
+</body>
+</html>
