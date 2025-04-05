@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualisation of a lensed gravitational wave-</title>
+    <title>Visualisation of a lensed gravitational wave</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
     <!--script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script-->
 
@@ -202,7 +202,7 @@
             soundBuffer = resampleAudio(normalizedValues, sampleRate, samplesSecond);
             //wave_ = soundBuffer;
            
-            // probar amb una interpolació cúbica
+            // probar amb una interpolacio cubica
 
             let audioBuffer = getAudioContext().createBuffer(1, soundBuffer.length, sampleRate);
             audioBuffer.copyToChannel(soundBuffer, 0);
@@ -416,14 +416,14 @@
 //            endShape();
 
             // Dibujar valores de phi(tau)
-            stroke(0, 255, 0);
-            beginShape();
-            for (let i = 0; i < tau_values.length; i++) {
-                let x = map(tau_values[i], t_init, t_end-offset, 50, 850);
-                let y = map(phi_tau_values[i], -1, 1, 550, 50);
-                vertex(x, y);
-            }
-            endShape();
+            //stroke(0, 255, 0);
+            //beginShape();
+            //for (let i = 0; i < tau_values.length; i++) {
+             //   let x = map(tau_values[i], t_init, t_end-offset, 50, 850);
+//                let y = map(phi_tau_values[i], -1, 1, 550, 50);
+ //               vertex(x, y);
+//            }
+ //           endShape();
 
 
         }
