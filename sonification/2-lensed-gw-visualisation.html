@@ -14,6 +14,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
     <!--script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script-->
 
+<div id="html-text" style="position: relative;">
+
 <h4>Visualisation of a gravitationally lensed gravitational wave (in the interference regime)</h4>
 
 <p>[We recommend using a computer screen to see the page optimally]</p>
@@ -27,13 +29,15 @@
 (2) Choose the value of the mass of the gravitational lens - the astrophysical object that will distort the gravitational wave. <br>
 (3) Choose the value of y, the parameter that quantifies the misalignment of the source, lens and observer. </p>
 
-<p>The plot that appears represents the deformation of space-time (one of the polarisations), h+, as a function of time t. The grey line corresponds to the unlensed gravitational wave, while the blue line correspond to the lensed one.</p>
+<p>The plot that appears represents the deformation of space-time (one of the polarisations), h+, as a function of time t. The grey line corresponds to the unlensed gravitational wave, while the blue line corresponds to the lensed one.</p>
 
 <br>
 <br>
 <br>
 <br>
 <br>
+
+</div>
 
     <style>
         input[type="radio"] {
@@ -339,6 +343,7 @@
 
             createElement('label', 'Chirp mass of the source (in units of solar mass): ').position(10, 330);
             let massRadio = createRadio('massa_font').position(350, 330);
+            massRadio.parent('html-text');
             massRadio.option('5', 5);
             massRadio.option('30', 30);
             massRadio.option('80', 80);
@@ -351,6 +356,7 @@
             // radios para massa de la lent (en unitats de massa solar): 30, 300, 3000, 6000, 3e4, 3e5
             createElement('label', 'Lens mass (in units of solar mass): ').position(10, 360);
             let massaLentRadio = createRadio('massa_lent').position(350, 360);
+            massaLentRadio.parent('html-text');
             massaLentRadio.option('30', 30);
             massaLentRadio.option('300', 300);
             massaLentRadio.option('3000', 3000);
@@ -365,6 +371,7 @@
 
             createElement('label', 'Source alignment (y): ').position(10, 390);
             let yRadio = createRadio('y_position').position(350, 390);
+            yRadio.parent('html-text');
             yRadio.option('0.1', 0.1);
             yRadio.option('0.2', 0.2);
             yRadio.option('0.3', 0.3);
