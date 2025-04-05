@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualisation of a lensed gravitational wave</title>
+    <style type="text/css">
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 18x;
+        }
+    </style>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
     <!--script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script-->
 
@@ -326,8 +333,8 @@
             generateValues();
             h_plus_values_shifted = generateShiftedWave(h_plus_values, offset);
 
-            createElement('label', 'Chirp mass of the source (in units of solar mass): ').position(10, 250);
-            let massRadio = createRadio('massa_font').position(350, 250);
+            createElement('label', 'Chirp mass of the source (in units of solar mass): ').position(10, 280);
+            let massRadio = createRadio('massa_font').position(350, 280);
             massRadio.option('5', 5);
             massRadio.option('30', 30);
             massRadio.option('80', 80);
@@ -338,8 +345,8 @@
             });
 
             // radios para massa de la lent (en unitats de massa solar): 30, 300, 3000, 6000, 3e4, 3e5
-            createElement('label', 'Lens mass (in units of solar mass): ').position(10, 280);
-            let massaLentRadio = createRadio('massa_lent').position(350, 280);
+            createElement('label', 'Lens mass (in units of solar mass): ').position(10, 310);
+            let massaLentRadio = createRadio('massa_lent').position(350, 310);
             massaLentRadio.option('30', 30);
             massaLentRadio.option('300', 300);
             massaLentRadio.option('3000', 3000);
@@ -352,8 +359,8 @@
                 updateValues();
             });
 
-            createElement('label', 'Source alignment (y): ').position(10, 310);
-            let yRadio = createRadio('y_position').position(350, 310);
+            createElement('label', 'Source alignment (y): ').position(10, 340);
+            let yRadio = createRadio('y_position').position(350, 340);
             yRadio.option('0.1', 0.1);
             yRadio.option('0.2', 0.2);
             yRadio.option('0.3', 0.3);
