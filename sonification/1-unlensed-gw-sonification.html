@@ -11,6 +11,8 @@
         }
     </style>
 
+
+
 <p>Instructions:<br>
 (1) In the text box, write the value of the "chirp mass" of the black hole binary system that you would like to hear.<br>
 (2) Click the left "Send" button to create the visual gravitational wave representation. The plot that will appear represents the deformation of space-time (one of the polarisations), h+, as a function of time t.<br>
@@ -84,14 +86,14 @@
             generateValues();
 
             // Crear campos de entrada para masa y distancia
-            createElement('label', 'Chirp mass of the source<br>(in units of solar mass): ').position(10, 10);
-            massInput = createInput('30').position(250, 10);
+            createElement('label', 'Chirp mass of the source<br>(in units of solar mass): ').position(10, 100);
+            massInput = createInput('30').position(250, 100);
             
             //createElement('label', 'Distancia (megaparsecs): ').position(10, 40);
             //distanceInput = createInput('1').position(250, 40);
 
-            // Crear botón de enviar
-            submitButton = createButton('Send').position(400, 10);
+            // Crear boton de enviar
+            submitButton = createButton('Send').position(400, 100);
             submitButton.mousePressed(updateValues);
 
             // Crear boton de reproduccion de sonido
