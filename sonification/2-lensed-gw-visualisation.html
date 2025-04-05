@@ -7,16 +7,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
     <!--script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script-->
 
-In the <a href="https://arxiv.org/abs/2407.09588" target="_blank">documentation</a>, you can read about the physics of the binary black hole merger and the gravitational lensing effect. You can learn about how the different parameters of the lensing system (source mass, lens mass, source position) affect the gravitational wave, and how the distortion looks like as they change.
+<h4>Visualisation of a gravitationally lensed gravitational wave (in the interference regime)</h4>
 
-To hear the sonification of some combinations of the parameters, please visit <a href="https://zoom3.net/sonificacions/ona-gravitacional-lent-exemples.html" target="_blank">the third page</a>.</p>
+<p>In the <a href="https://arxiv.org/abs/2407.09588" target="_blank">documentation</a>, you can read about the physics of the binary black hole merger and the gravitational lensing effect. You can learn about how the different parameters of the lensing system (source mass, lens mass, source position) affect the gravitational wave, and how the distortion looks like as they change.</p>
 
-Instructions:<br>
+<p>To hear the sonification of some combinations of the parameters, please visit <a href="https://zoom3.net/sonificacions/ona-gravitacional-lent-exemples.html" target="_blank">this webpage</a>.</p>
+
+<p><b>Instructions:</b><br>
 (1) Choose the value of the source "chirp mass" of the black hole binary system that you would like.<br>
 (2) Choose the value of the mass of the gravitational lens - the astrophysical object that will distort the gravitational wave. <br>
 (3) Choose the value of y, the parameter that quantifies the misalignment of the source, lens and observer. </p>
 
 <p>The plot that appears represents the deformation of space-time (one of the polarisations), h+, as a function of time t.</p>
+
+<br>
+<br>
+<br>
 
     <style>
         input[type="radio"] {
@@ -320,8 +326,8 @@ Instructions:<br>
             generateValues();
             h_plus_values_shifted = generateShiftedWave(h_plus_values, offset);
 
-            createElement('label', 'Chirp mass of the source (in units of solar mass): ').position(10, 300);
-            let massRadio = createRadio('massa_font').position(350, 10);
+            createElement('label', 'Chirp mass of the source (in units of solar mass): ').position(10, 250);
+            let massRadio = createRadio('massa_font').position(350, 250);
             massRadio.option('5', 5);
             massRadio.option('30', 30);
             massRadio.option('80', 80);
@@ -332,8 +338,8 @@ Instructions:<br>
             });
 
             // radios para massa de la lent (en unitats de massa solar): 30, 300, 3000, 6000, 3e4, 3e5
-            createElement('label', 'Lens mass (in units of solar mass): ').position(10, 330);
-            let massaLentRadio = createRadio('massa_lent').position(350, 40);
+            createElement('label', 'Lens mass (in units of solar mass): ').position(10, 280);
+            let massaLentRadio = createRadio('massa_lent').position(350, 280);
             massaLentRadio.option('30', 30);
             massaLentRadio.option('300', 300);
             massaLentRadio.option('3000', 3000);
@@ -346,8 +352,8 @@ Instructions:<br>
                 updateValues();
             });
 
-            createElement('label', 'Source alignment (y): ').position(10, 360);
-            let yRadio = createRadio('y_position').position(350, 70);
+            createElement('label', 'Source alignment (y): ').position(10, 310);
+            let yRadio = createRadio('y_position').position(350, 310);
             yRadio.option('0.1', 0.1);
             yRadio.option('0.2', 0.2);
             yRadio.option('0.3', 0.3);
