@@ -13,7 +13,7 @@
 
 <h4>Sonificaci&oacute; d'una ona gravitacional (sense l'efecte de lent gravitat&ograve;ria)</h4>
 
-<p><i>Adaptat de <a href"https://zoom3.net/sonificacions/ona-gravitacional.html" target="_blank">Jordi Espuny</a></i></p>
+<p><i>Adaptat de <a href="https://zoom3.net/sonificacions/ona-gravitacional.html" target="_blank">Jordi Espuny</a></i></p>
 
 <p> Les ones gravitacionals, oscil·lacions del propi espai-temps, viatgen a trav&eacute;s de l'univers i les podem detectar. Quan es formen en fusions de forats negres, la seva amplitud (com de fortes s&oacute;n) augmenta amb el temps i &eacute;s m&agrave;xima durant la fusi&oacute;. Aqu&iacute;, podeu veure l'amplitud (eix vertical) al llarg del temps (eix horitzontal) en els &uacute;ltims instants abans de la fusi&oacute. Depenent de com de massius siguin els forats negres, la freq&uuml;&egrave;ncia de les ones gravitacionals ser&agrave; diferent. En aquesta p&agrave;gina interactiva, podeu escoltar-la com a so depenent de la massa "de chirp" (una combinaci&oacute; especial de les masses dels forats negres).
 </p>
@@ -94,18 +94,18 @@
             generateValues();
 
             // Crear campos de entrada para masa y distancia
-            createElement('label', 'Chirp mass of the source<br>(in units of solar mass): ').position(10, 200);
-            massInput = createInput('30').position(250, 220);
+            createElement('label', 'Chirp mass of the source<br>(in units of solar mass): ').position(10, 700);
+            massInput = createInput('30').position(250, 720);
             
             //createElement('label', 'Distancia (megaparsecs): ').position(10, 40);
             //distanceInput = createInput('1').position(250, 40);
 
             // Crear boton de enviar
-            submitButton = createButton('Enviar').position(400, 220);
+            submitButton = createButton('Enviar').position(400, 720);
             submitButton.mousePressed(updateValues);
 
             // Crear boton de reproduccion de sonido
-            let playButton = createButton('Reprodu&iuml;r so').position(450, 220);
+            let playButton = createButton('Reprodu&iuml;r so').position(450, 720);
             playButton.mousePressed(playSound);
         }
 
