@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonificaci&oacute; d'una ona gravitacional</title>
+    <style type="text/css">
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 18x;
+        }
+    </style>
+
+<h4>Sonificaci&oacute; d'una ona gravitacional (sense l'efecte de lent gravitat&ograve;ria)</h4>
+
+<p><i>Adaptat de <a href"https://zoom3.net/sonificacions/ona-gravitacional.html" target="_blank">Jordi Espuny</a></i></p>
+
+<p> Les ones gravitacionals, oscil·lacions del propi espai-temps, viatgen a trav&eacute;s de l'univers i les podem detectar. Quan es formen en fusions de forats negres, la seva amplitud (com de fortes s&oacute;n) augmenta amb el temps i &eacute;s m&agrave;xima durant la fusi&oacute;. Aqu&iacute;, podeu veure l'amplitud (eix vertical) al llarg del temps (eix horitzontal) en els &uacute;ltims instants abans de la fusi&oacute. Depenent de com de massius siguin els forats negres, la freq&uuml;&egrave;ncia de les ones gravitacionals ser&agrave; diferent. En aquesta p&agrave;gina interactiva, podeu escoltar-la com a so depenent de la massa "de chirp" (una combinaci&oacute; especial de les masses dels forats negres).
+</p>
+
+<p><b>Instruccions:</b><br>
+(1) Al requadre de text, escriviu el valor de la massa "de chirp" del sistema binari de forats negres que vulgueu escoltar (recomanat entre 1 i 1000).<br>
+(2) Cliqueu el bot&oacute; "Enviar" per a crear la representaci&oacute; visual de la ona gravitacional. El gr&agrave;fic que apareixer&agrave; representa l'amplitude de la deformaci&oacute; de l'espai-temps (per a una de les polaritzacions), h+, en funci&oacute; del temps t.<br>
+(3) Cliqueu el bot&oacute; dret "Reprodu&iuml;r so" per a escoltar la sonificaci&oacute; de la ona gravitacional que acabeu de crear. Aneu amb compte amb les vostres o&iuml;des quan escolteu sons aguts (per sota de 1 massa solar)</p>
+
+<br>
+<br>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
+    <script>
+        // Funcion para calcular phi(tau)
+        function phi(tau, G, Mc, c, phi0) {
+            const term1 = Math.pow(5 * G * Mc / Math.pow(c, 3), -5 / 8);
+            const phi_tau = -2 * term1 * Math.pow(tau, 5 / 8) + phi0;
+            return phi_tau;
+        }
+
+        // Funcion para calcular h_+(t)
+        function h_plus(t, G, Mc, c, r, phi0) {
+            const tau = t; // En este caso, t y tau son la misma variable
+            const phi_tau = phi(tau, G, Mc, c, phi0);
+            const term1 = 1 / r;
+            const term2 = Math.pow(G * Mc / Math.pow(c, 2), 5 / 4);
+            const term3 = Math.pow(5 / (c * tau), 1 / 4);
+            const h_plus_t = term1 * term2 * term3 * Math.cos(phi_tau);
+            return h_plus_t;
+        }
+
+        // Variables globales
+        let G = 6.67430e-11; // Constante de gravitacion universal en m^3 kg^-1 s^-2
+        let Mc = 30*1.989e30; // Masa en kg (30 masa del Sol)
+        let c = 299792458; // Velocidad de la luz en m/s
+        let r = 3.086e25; // Distancia en metros (1 megaparsec en metros)
+        let phi0 = 0; // Valor inicial de Phi
+        let t_init = 3; // Valor inicial de tau
+        let t_end = 0.001; // Valor final de tau
+        let tau_values = [];
+        let h_plus_values = [];
+
+        // lents
+        /*let mlent = 30000; // massa de la lent en masses solars
+        let y=0.25; // posicio de la font respecte l'alineament lent-observador
+        let vv = y/((y.pow(2)+4).pow(1/2)); // eq. 29, BU-2022
+        //amp1 = (u+v)/2; // amplitud de la primera imatge
+        //amp2 = (u-v)/2; // amplitud de la segona imatge
+        let amp1 = (0.25*(~vv+(1/~vv)+2)).pow(1/2); // eq. 30, BU-2022
+        let amp2 = (0.25*(~vv+(1/~vv)-2)).pow(1/2); // eq. 30, BU-2022*/
+        let massInput, distanceInput, submitButton;
+
+        // Generacion de los valores de tau y h_+(t)
+        function generateValues() {
+            tau_values = [];
+            h_plus_values = [];
+            let steps = 4000; // NÃºmero de pasos entre t_init y t_end
+            for (let i = 0; i <= steps; i++) {
+                let tau = t_init + (t_end - t_init) * (i / steps);
+                tau_values.push(tau);
+                h_plus_values.push(h_plus(tau, G, Mc, c, r, phi0));
+            }
+            h_plus_values = normalizeValues(h_plus_values);
+        }
+
+        // Normalizacion de los valores entre -1 y 1
+        function normalizeValues(values) {
+            let maxVal = Math.max(...values);
+            let minVal = Math.min(...values);
+            return values.map(v => 2 * (v - minVal) / (maxVal - minVal) - 1);
+        }
+
+        // Setup de p5.js
+        function setup() {
+            createCanvas(800, 600);
+            generateValues();
+
+            // Crear campos de entrada para masa y distancia
+            createElement('label', 'Chirp mass of the source<br>(in units of solar mass): ').position(10, 200);
+            massInput = createInput('30').position(250, 220);
+            
+            //createElement('label', 'Distancia (megaparsecs): ').position(10, 40);
+            //distanceInput = createInput('1').position(250, 40);
+
+            // Crear boton de enviar
+            submitButton = createButton('Enviar').position(400, 220);
+            submitButton.mousePressed(updateValues);
+
+            // Crear boton de reproduccion de sonido
+            let playButton = createButton('Reprodu&iuml;r so').position(450, 220);
+            playButton.mousePressed(playSound);
+        }
+
+        // Funcion para actualizar los valores de masa y distancia
+        function updateValues() {
+            let massMultiplier = parseFloat(massInput.value());
+            //let distanceMpc = parseFloat(distanceInput.value());
+
+            Mc = 1.989e30 * massMultiplier; // Convertir masa a kg
+            //r = distanceMpc * 3.086e25; // Convertir distancia a metros (1 Mpc = 3.086e25 metros)
+
+            generateValues();
+            redraw();
+        }
+
+        // Funcion para reproducir el sonido
+        function playSound() {
+            let sampleRate = 44100; // Frecuencia de muestreo
+            let sound = new p5.SoundFile();
+            sound.setBuffer([h_plus_values], sampleRate);
+
+            // Crear un objeto p5.SoundFile y reproducir el sonido
+            let soundBuffer = new Float32Array(h_plus_values.length);
+            for (let i = 0; i < h_plus_values.length; i++) {
+                soundBuffer[i] = h_plus_values[i];
+            }
+            let audioBuffer = getAudioContext().createBuffer(1, soundBuffer.length, sampleRate);
+            audioBuffer.copyToChannel(soundBuffer, 0);
+
+            let source = getAudioContext().createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(getAudioContext().destination);
+            source.start();
+        }
+
+        // Draw de p5.js
+        function draw() {
+            background(255);
+            frameRate(1);
+
+            // Dibujar ejes
+            stroke(0);
+            line(50, 550, 750, 550); // Eje x
+            line(50, 550, 50, 50); // Eje y
+
+            // Etiquetas de los ejes
+            textSize(12);
+            textAlign(CENTER);
+            text('t', 400, 580);
+            textAlign(RIGHT);
+            text('h+(t)', 40, 50);
+
+            // Dibujar valores de h_+(t)
+            noFill();
+            stroke(0, 0, 255);
+            beginShape();
+            for (let i = 0; i < tau_values.length; i++) {
+                let x = map(tau_values[i], t_init, t_end, 50, 750);
+                let y = map(h_plus_values[i], -1, 1, 550, 50);
+                vertex(x, y);
+            }
+            endShape();
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
