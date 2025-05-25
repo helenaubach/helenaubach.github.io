@@ -15,12 +15,12 @@
 
 <p><i>Adaptat de <a href="https://zoom3.net/sonificacions/ona-gravitacional.html" target="_blank">Jordi Espuny</a></i></p>
 
-<p> Les ones gravitacionals, oscil&middot;lacions del propi espai-temps, viatgen a trav&eacute;s de l'univers i les podem detectar quan travessen la Terra. Quan es formen en fusions de forats negres, la seva amplitud (&eacute;s a dir, com de fortes s&oacute;n) augmenta amb el temps i &eacute;s m&agrave;xima durant la fusi&oacute;. Aqu&iacute;, podeu veure l'amplitud (eix vertical) al llarg del temps (eix horitzontal) en els &uacute;ltims instants abans de la fusi&oacute. Depenent de com de massius siguin els forats negres, la freq&uuml;&egrave;ncia de les ones gravitacionals ser&agrave; diferent. En aquesta p&agrave;gina interactiva, podeu escoltar-la com a so depenent de la massa "de chirp" (una combinaci&oacute; especial de les masses dels forats negres).
+<p> Les ones gravitacionals, oscil&middot;lacions del propi espai-temps, viatgen a trav&eacute;s de l'univers i les podem detectar quan travessen la Terra. Les ones gravitacionals es formen, entre d'altres llocs, en fusions de forats negres, on la seva amplitud (&eacute;s a dir, com de fortes s&oacute;n) augmenta amb el temps i &eacute;s m&agrave;xima durant la fusi&oacute;. Aqu&iacute;, podeu veure l'amplitud de la deformaci&oacute; de l'espai-temps (eix vertical) al llarg del temps (eix horitzontal) en els &uacute;ltims instants abans de la fusi&oacute. Depenent de com de massius siguin els forats negres, la freq&uuml;&egrave;ncia de les ones gravitacionals ser&agrave; diferent. En aquesta p&agrave;gina interactiva, podeu escoltar-la com a so depenent de la massa "de chirp" (una combinaci&oacute; especial de les masses dels forats negres).
 </p>
 
 <p><b>Instruccions:</b><br>
 (1) Al requadre de text, escriviu el valor de la massa "de chirp" del sistema binari de forats negres que vulgueu escoltar (recomanat entre 1 i 300 masses solars).<br>
-(2) Cliqueu el bot&oacute; "Enviar" per a crear la representaci&oacute; visual de la ona gravitacional. El gr&agrave;fic que apareixer&agrave; representa l'amplitude de la deformaci&oacute; de l'espai-temps (per a una de les polaritzacions), h+, en funci&oacute; del temps t.<br>
+(2) Cliqueu el bot&oacute; "Enviar" per a crear la representaci&oacute; visual de la ona gravitacional. El gr&agrave;fic que apareixer&agrave; representa l'amplitud de la deformaci&oacute; de l'espai-temps (per a una de les polaritzacions), h+, en funci&oacute; del temps t.<br>
 (3) Cliqueu el bot&oacute; dret "Reprodu&iuml;r so" per a escoltar la sonificaci&oacute; de la ona gravitacional que acabeu de crear. Aneu amb compte amb les vostres o&iuml;des quan escolteu sons aguts (per sota d'1 massa solar)</p>
 
 <br>
@@ -94,18 +94,18 @@
             generateValues();
 
             // Crear campos de entrada para masa y distancia
-            createElement('label', 'Massa de chirp de la font<br>(en unitats de masses solars): ').position(10, 350);
-            massInput = createInput('30').position(250, 370);
+            createElement('label', 'Massa de chirp de la font<br>(en unitats de masses solars): ').position(10, 320);
+            massInput = createInput('30').position(250, 340);
             
             //createElement('label', 'Distancia (megaparsecs): ').position(10, 40);
             //distanceInput = createInput('1').position(250, 40);
 
             // Crear boton de enviar
-            submitButton = createButton('Enviar').position(400, 370);
+            submitButton = createButton('Enviar').position(400, 340);
             submitButton.mousePressed(updateValues);
 
             // Crear boton de reproduccion de sonido
-            let playButton = createButton('Reprodu&iuml;r so').position(450, 370);
+            let playButton = createButton('Reprodu&iuml;r so').position(450, 340);
             playButton.mousePressed(playSound);
         }
 
